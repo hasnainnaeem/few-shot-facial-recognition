@@ -4,12 +4,11 @@ from preprocess import load_dataset
 from torch_snippets import *
 import wandb
 
-wandb.init()
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 CLASSVECTORSPATH = "./data/class_vectors.npy"
 DATAPATH = "./data/facial_data.pkl"
-CLASSESFILEPATH = "./src/train_classes.txt"
+CLASSESFILEPATH = "./data/train_classes.txt"
 
 
 def build_model():

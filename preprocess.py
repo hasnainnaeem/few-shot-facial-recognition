@@ -7,7 +7,9 @@ from torch.utils.data import TensorDataset
 from torch.utils.data import DataLoader
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
-
+# uncomment before running code for first time
+# wandb.login(key="your key")
+wandb.init()
 
 def load_dataset(data_path, class_vectors_path, classes_file_path):
     with open(classes_file_path, 'r') as infile:
@@ -51,9 +53,9 @@ def load_dataset(data_path, class_vectors_path, classes_file_path):
     x_valid, y_valid = np.squeeze(np.asarray(x_valid)), np.squeeze(np.asarray(y_valid))
     x_valid = normalize(x_valid, norm='l2')
 
-    y_zsl, x_zsl = zip(*test_data)
-    zsl_x, y_zsl = np.squeeze(np.asarray(x_zsl)), np.squeeze(np.asarray(y_zsl))
-    zsl_x = normalize(x_zsl, norm='l2')
+    y_zsl, zsl_x = zip(*test_data)
+    zsl_x, y_zsl = np.squeeze(np.asarray(zsl_x)), np.squeeze(np.asarray(y_zsl))
+    zsl_x = normalize(zsl_x, norm='l2')
 
     trn_ds = TensorDataset(*[torch.Tensor(t).to(device) for t in [x_train, y_train]])
     val_ds = TensorDataset(*[torch.Tensor(t).to(device) for t in [x_valid, y_valid]])

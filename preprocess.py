@@ -41,7 +41,7 @@ def load_dataset(data_path, class_vectors_path, classes_file_path):
 
     train_clss = [clss for clss, feat in train_data]
     valid_clss = [clss for clss, feat in valid_data]
-    test_clss = [clss for clss, feat in test_data]
+    zsl_class = [clss for clss, feat in test_data]
 
     x_train, y_train = zip(*train_data)
     x_train, y_train = np.squeeze(np.asarray(x_train)), np.squeeze(np.asarray(y_train))
@@ -52,12 +52,12 @@ def load_dataset(data_path, class_vectors_path, classes_file_path):
     x_valid = normalize(x_valid, norm='l2')
 
     y_zsl, x_zsl = zip(*test_data)
-    x_zsl, y_zsl = np.squeeze(np.asarray(x_zsl)), np.squeeze(np.asarray(y_zsl))
-    x_zsl = normalize(x_zsl, norm='l2')
+    zsl_x, y_zsl = np.squeeze(np.asarray(x_zsl)), np.squeeze(np.asarray(y_zsl))
+    zsl_x = normalize(x_zsl, norm='l2')
 
     trn_ds = TensorDataset(*[torch.Tensor(t).to(device) for t in [x_train, y_train]])
     val_ds = TensorDataset(*[torch.Tensor(t).to(device) for t in [x_valid, y_valid]])
 
     trn_dl = DataLoader(trn_ds, batch_size=32, shuffle=True)
     val_dl = DataLoader(val_ds, batch_size=32, shuffle=False)
-    return trn_dl, val_dl
+    return trn_dl, val_dl, zsl_x, zsl_class

@@ -43,7 +43,7 @@ def validate_batch(model, data, criterion):
 
 
 if __name__ == '__main__':
-    trn_dl, val_dl = load_dataset(DATAPATH, CLASSVECTORSPATH, CLASSESFILEPATH)
+    trn_dl, val_dl, zsl_x, zsl_class = load_dataset(DATAPATH, CLASSVECTORSPATH, CLASSESFILEPATH)
     model = build_model().to(device)
     criterion = torch.nn.MSELoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
@@ -68,7 +68,7 @@ if __name__ == '__main__':
 
     log.plot(log=True)
 
-    pred_zsl = model(torch.Tensor(x_zsl).to(device)).cpu().detach().numpy()
+    pred_zsl = model(torch.Tensor(zsl_x).to(device)).cpu().detach().numpy()
 
     class_vectors = sorted(np.load(CLASSVECTORSPATH, allow_pickle=True), key=lambda x: x[0])
     classnames, vectors = zip(*class_vectors)
@@ -83,4 +83,4 @@ if __name__ == '__main__':
     for item in dists:
         best_classes.append([classnames[j] for j in np.argsort(item)[:5]])
 
-    print(np.mean([i in J for i, J in zip(zero_shot_clss, best_classes)]))
+    print(np.mean([i in J for i, J in zip(zsl_class, best_classes)]))
